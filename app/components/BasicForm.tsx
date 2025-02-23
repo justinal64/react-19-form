@@ -20,7 +20,7 @@ const BasicForm = () => {
 
   // Standalone action function
   const handleNewsletterSubscription = async (
-    previousState: any,
+    previousState: ActionState | null,
     formData: FormData
   ): Promise<ActionState> => {
     const email = formData.get("email");
