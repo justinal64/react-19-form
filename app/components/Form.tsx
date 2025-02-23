@@ -1,13 +1,20 @@
+// This is required to designate to use useActionState
 "use client";
+
 import { useActionState } from "react";
 
-const fakeSendEmail = async () => {
-  return new Promise((resolve) => setTimeout(resolve, 1000));
-};
+interface FormData {
+  get(name: string): FormDataEntryValue | null;
+}
 
 const NewsletterSubscribe = () => {
+  // This simulates an api call to validate the form data
+  const validateData = async () => {
+    return new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
   const [result, submitAction, isPending] = useActionState(
-    async (previousState, formData) => {
+    async (previousState: any, formData: FormData) => {
       const email = formData.get("email");
       const name = formData.get("name");
 
@@ -18,7 +25,7 @@ const NewsletterSubscribe = () => {
         };
       }
 
-      await fakeSendEmail();
+      await validateData();
 
       return {
         type: "success",
@@ -34,12 +41,16 @@ const NewsletterSubscribe = () => {
       {isPending && <p className="message loading">Loading ...</p>}
       <form action={submitAction}>
         <h3>Join the newsletter</h3>
-        <div>
-          <label htmlFor="name">Name</label>
+        <div className="pb-2">
+          <label htmlFor="name" className="pr-4">
+            Name
+          </label>
           <input type="text" id="name" name="name" className="text-black" />
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className="pb-2">
+          <label htmlFor="email" className="pr-4">
+            Email
+          </label>
           <input type="email" id="email" name="email" className="text-black" />
         </div>
         <div>
