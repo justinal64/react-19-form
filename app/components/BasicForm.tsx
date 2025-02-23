@@ -12,7 +12,7 @@ interface ActionState {
   message: string;
 }
 
-const NewsletterSubscribe = () => {
+const BasicForm = () => {
   // This simulates an api call to validate the form data
   const fakeApicall = async () => {
     return new Promise((resolve) => setTimeout(resolve, 2000));
@@ -88,4 +88,4 @@ const NewsletterSubscribe = () => {
   );
 };
 
-export default NewsletterSubscribe;
+export default BasicForm;
