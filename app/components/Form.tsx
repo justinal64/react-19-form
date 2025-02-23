@@ -26,7 +26,7 @@ const NewsletterSubscribe = () => {
     const email = formData.get("email");
     const name = formData.get("name");
 
-    // Basic validation (could integrate Yup here)
+    // Basic validation (use Yup here)
     if (!name || !email) {
       return {
         type: "error",
