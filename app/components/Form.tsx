@@ -7,32 +7,51 @@ interface FormData {
   get(name: string): FormDataEntryValue | null;
 }
 
+interface ActionState {
+  type: "success" | "error";
+  message: string;
+}
+
 const NewsletterSubscribe = () => {
   // This simulates an api call to validate the form data
-  const validateData = async () => {
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+  const fakeApicall = async () => {
+    return new Promise((resolve) => setTimeout(resolve, 2000));
+  };
+
+  // Standalone action function
+  const handleNewsletterSubscription = async (
+    previousState: any,
+    formData: FormData
+  ): Promise<ActionState> => {
+    const email = formData.get("email");
+    const name = formData.get("name");
+
+    // Basic validation (could integrate Yup here)
+    if (!name || !email) {
+      return {
+        type: "error",
+        message: "Please fill in your name and email.",
+      };
+    }
+
+    // Simulate an api call
+    await fakeApicall();
+
+    // actionState requires the response to be an object with a type and message
+    return {
+      type: "success",
+      message: "You have successfully subscribed!",
+    };
   };
 
   const [result, submitAction, isPending] = useActionState(
-    async (previousState: any, formData: FormData) => {
-      const email = formData.get("email");
-      const name = formData.get("name");
-
-      if (!name || !email) {
-        return {
-          type: "error",
-          message: `Please fill in your name and email.`,
-        };
-      }
-
-      await validateData();
-
-      return {
-        type: "success",
-        message: `You have succesfully subscribed!`,
-      };
-    },
+    handleNewsletterSubscription,
     null
+    // Example of what the initial state (value assigned to previousState) could look like
+    // {
+    //   type: "start",
+    //   message: "I don't have any data yet....",
+    // }
   );
 
   return (
@@ -54,7 +73,15 @@ const NewsletterSubscribe = () => {
           <input type="email" id="email" name="email" className="text-black" />
         </div>
         <div>
-          <button type="submit">Subscribe</button>
+          <button
+            type="submit"
+            disabled={isPending}
+            className={`w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 ${
+              isPending ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isPending ? "Subscribing..." : "Subscribe"}
+          </button>
         </div>
       </form>
     </>
